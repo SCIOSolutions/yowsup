@@ -9,6 +9,15 @@ Donate to me: <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hoste
 
 ==========================================================
 
+If you got syntax error when compiling PyCrypto under Windows, follow those steps:
+
+1 - Type "Cross Tools" on startup menu to find and open "VS2015 x64 x86 Cross Tools Command Prompt" (works also with VS2017)
+2 - Enter the following command: set CL=-FI"%programfiles(x86)%\Microsoft Visual Studio 14.0\VC\include\stdint.h"
+3 - Try to install PyCrypto with pip: pip install pycrypto
+4 - Close the prompt and try to install yowsup again.
+
+==========================================================
+
 ## Yowsup opened WhatsApp service under platforms!
 
 Yowsup is a python library that enables you build application which use WhatsApp service. Yowsup has been used to create an unofficial WhatsApp client Nokia N9 through the Wazapp project which was in use by 200K + users as well as another fully featured unofficial client for Blackberry 10
