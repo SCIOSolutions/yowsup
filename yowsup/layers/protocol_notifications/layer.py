@@ -18,12 +18,13 @@ class YowNotificationsProtocolLayer(YowProtocolLayer):
 
     def recvNotification(self, node):
         if node["type"] == "picture":
-            if node.getChild("set"):
-                self.toUpper(SetPictureNotificationProtocolEntity.fromProtocolTreeNode(node))
-            elif node.getChild("delete"):
-                self.toUpper(DeletePictureNotificationProtocolEntity.fromProtocolTreeNode(node))
-            else:
-                self.raiseErrorForNode(node)
+            #if node.getChild("set"): 
+            #   self.toUpper(SetPictureNotificationProtocolEntity.fromProtocolTreeNode(node)) 
+            #elif node.getChild("delete"): 
+            #   self.toUpper(DeletePictureNotificationProtocolEntity.fromProtocolTreeNode(node)) 
+            #else: 
+            #   self.raiseErrorForNode(node) 
+            pass
         elif node["type"] == "status":
             self.toUpper(StatusNotificationProtocolEntity.fromProtocolTreeNode(node))
         elif node["type"] == "features":
@@ -34,7 +35,7 @@ class YowNotificationsProtocolLayer(YowProtocolLayer):
             pass
         elif node["type"] == "contacts":
             pass
-        elif node["type"] == "web":
+        elif node["type"] in ["web", "location"]:
             # Not implemented
             pass
         else:
