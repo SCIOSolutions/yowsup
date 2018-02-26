@@ -193,7 +193,7 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
         if m.HasField("conversation"):
             handled = True
             self.handleConversationMessage(node, m.conversation)
-        elif m.HasField("contact_message"):
+        ''' elif m.HasField("contact_message"):
             handled = True
             self.handleContactMessage(node, m.contact_message)
         elif m.HasField("url_message"):
@@ -204,7 +204,7 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
             self.handleLocationMessage(node, m.location_message)
         elif m.HasField("image_message"):
             handled = True
-            self.handleImageMessage(node, m.image_message)
+            self.handleImageMessage(node, m.image_message) '''
 
         if not handled:
             # raise ValueError("Unhandled")
