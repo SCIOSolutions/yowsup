@@ -209,7 +209,7 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
         if not handled:
             # raise ValueError("Unhandled")
             logger.error("Unhandled message. Skipping...")
-            self.toLower(OutgoingReceiptProtocolEntity(node["id"], node["from"], read= True, participant=node["participant"]).toProtocolTreeNode())
+            self.toLower(OutgoingReceiptProtocolEntity(node["id"], node["from"], participant=node["participant"]).toProtocolTreeNode())
             return
 
     def handleSenderKeyDistributionMessage(self, senderKeyDistributionMessage, axolotlAddress):
