@@ -44,18 +44,21 @@ class YowMediaProtocolLayer(YowProtocolLayer):
             elif mediaNode.getAttributeValue("type") == "audio":
                 entity = AudioDownloadableMediaMessageProtocolEntity.fromProtocolTreeNode(node)
                 self.toUpper(entity)
-            elif mediaNode.getAttributeValue("type") == "video":
-                entity = VideoDownloadableMediaMessageProtocolEntity.fromProtocolTreeNode(node)
-                self.toUpper(entity)
             elif mediaNode.getAttributeValue("type") == "document":
                 entity = DocumentDownloadableMediaMessageProtocolEntity.fromProtocolTreeNode(node)
+                self.toUpper(entity)
+            """ elif mediaNode.getAttributeValue("type") == "vcard":
+                entity = VCardMediaMessageProtocolEntity.fromProtocolTreeNode(node)
+                self.toUpper(entity)
+            elif mediaNode.getAttributeValue("type") == "video":
+                entity = VideoDownloadableMediaMessageProtocolEntity.fromProtocolTreeNode(node)
                 self.toUpper(entity)
             elif mediaNode.getAttributeValue("type") == "location":
                 entity = LocationMediaMessageProtocolEntity.fromProtocolTreeNode(node)
                 self.toUpper(entity)
             elif mediaNode.getAttributeValue("type") == "vcard":
                 entity = VCardMediaMessageProtocolEntity.fromProtocolTreeNode(node)
-                self.toUpper(entity)
+                self.toUpper(entity) """
 
     def sendIq(self, entity):
         """

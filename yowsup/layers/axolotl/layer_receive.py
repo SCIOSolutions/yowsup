@@ -94,21 +94,30 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
     def handleEncMessage(self, node):
         encMessageProtocolEntity = EncryptedMessageProtocolEntity.fromProtocolTreeNode(node)
         isGroup =  node["participant"] is not None
-        senderJid = node["participant"] if isGroup else node["from"]
+
+        if isGroup:
+            self.toLower(OutgoingReceiptProtocolEntity(node["id"], node["from"], 'read', participant=node["participant"]).toProtocolTreeNode())
+        else:
+            senderJid = node["from"]
+
+        
         if node.getChild("enc")["v"] == "2" and node["from"] not in self.v2Jids:
             self.v2Jids.append(node["from"])
 
         try:
             if encMessageProtocolEntity.getEnc(EncProtocolEntity.TYPE_PKMSG):
+                logger.warning("TYPE_PKMSG")
                 self.handlePreKeyWhisperMessage(node)
             elif encMessageProtocolEntity.getEnc(EncProtocolEntity.TYPE_MSG):
+                logger.warning("TYPE_MSG")
                 self.handleWhisperMessage(node)
             if encMessageProtocolEntity.getEnc(EncProtocolEntity.TYPE_SKMSG):
+                logger.warning("TYPE_SKMSG")
                 self.handleSenderKeyMessage(node)
 
         except (InvalidMessageException, InvalidKeyIdException) as e:
             logger.warning("InvalidMessage or InvalidKeyIdException for %s, going to send a retry", encMessageProtocolEntity.getAuthor(False))
-
+            
             from yowsup.layers.axolotl.protocolentities.iq_key_get import GetKeysIqProtocolEntity
             logger.info("Trying GetKeys for %s, getting keys now", encMessageProtocolEntity.getAuthor(False))
             entity = GetKeysIqProtocolEntity([encMessageProtocolEntity.getAuthor(False)])
@@ -138,6 +147,7 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
                 return self.handleEncMessage(node)
             else:
                 logger.error("Ignoring message with untrusted identity")
+                self.toLower(OutgoingReceiptProtocolEntity(node["id"], node["from"], participant=node["participant"]).toProtocolTreeNode())
 
     def handlePreKeyWhisperMessage(self, node):
         pkMessageProtocolEntity = EncryptedMessageProtocolEntity.fromProtocolTreeNode(node)
@@ -234,7 +244,16 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
         if m.HasField("conversation"):
             handled = True
             self.handleConversationMessage(node, m.conversation)
-        elif m.HasField("contact_message"):
+        elif m.HasField("image_message"):
+            handled = True
+            self.handleImageMessage(node, m.image_message)
+        elif m.HasField("document_message"):
+            handled = True
+            self.handleDocumentMessage(node, m.document_message)
+        elif not handled:
+            #raise ValueError("Unhandled")
+            self.toLower(OutgoingReceiptProtocolEntity(node["id"], node["from"], participant=node["participant"]).toProtocolTreeNode())
+        """ elif m.HasField("contact_message"):
             handled = True
             self.handleContactMessage(node, m.contact_message)
         elif m.HasField("url_message"):
@@ -243,19 +262,11 @@ class AxolotlReceivelayer(AxolotlBaseLayer):
         elif m.HasField("location_message"):
             handled = True
             self.handleLocationMessage(node, m.location_message)
-        elif m.HasField("image_message"):
-            handled = True
-            self.handleImageMessage(node, m.image_message)
         elif m.HasField("video_message"):
             handled = True
             self.handleVideoMessage(node, m.video_message)
         elif m.HasField("audio_message"):
-            self.handleAudioMessage(node, m.audio_message)
-        elif m.HasField("document_message"):
-            handled = True
-            self.handleDocumentMessage(node, m.document_message)
-        elif not handled:
-            raise ValueError("Unhandled")
+            self.handleAudioMessage(node, m.audio_message) """
 
     def handleSenderKeyDistributionMessage(self, senderKeyDistributionMessage, axolotlAddress):
         groupId = senderKeyDistributionMessage.groupId

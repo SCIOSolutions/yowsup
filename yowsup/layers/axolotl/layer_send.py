@@ -73,7 +73,7 @@ class AxolotlSendLayer(AxolotlBaseLayer):
                                 self.sendToContact(node)
                             else:
                                 self.toLower(node)
-                        self.getKeysFor([node["to"]],on_get_keys, lambda: self.toLower(node))
+                        self.getKeysFor([node["to"]],on_get_keys, lambda n,e: self.toLower(node))
                     else :
                         sessionCipher = self.getSessionCipher(recipient_id)
                         messageData = messageData.SerializeToString() + self.getPadding()

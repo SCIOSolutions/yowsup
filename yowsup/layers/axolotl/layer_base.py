@@ -78,6 +78,7 @@ class AxolotlBaseLayer(YowProtocolLayer):
 
         def onError(errorNode, getKeysEntity):
             if errorClbk:
+                logger.error(errorNode)
                 errorClbk(errorNode, getKeysEntity)
 
         entity = GetKeysIqProtocolEntity(jids)
